@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторна робота №9 — Гра 21</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin-top: 50px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 150px;
+        }
+        .card {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #999;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #00ff00;
+            border: 1px solid #00aa00;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:disabled {
+            background-color: #ddd;
+            border-color: #999;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Гра «21»</h1>
+    
+    <div class="container">
+        <div class="box">
+            <h2 id="userName">User</h2>
+            <p>Очки: <span id="userScore">0</span></p>
+            <div class="card" id="userCard">—</div>
+        </div>
+
+        <div class="box">
+            <h2>Computer</h2>
+            <p>Очки: <span id="compScore">0</span></p>
+            <div class="card" id="compCard">—</div>
+        </div>
+    </div>
+
+    <p id="attemptText">Спроба 0 з 3</p>
+    <button id="btn" onclick="makeStep()">Generate</button>
+    <h3 id="result"></h3>
+
+    <script>
+        const std = {
+            cards: [
+                { name: "6", val: 6 },
+                { name: "7", val: 7 },
+                { name: "8", val: 8 },
+                { name: "9", val: 9 },
+                { name: "10", val: 10 },
+                { name: "Валет", val: 2 },
+                { name: "Дама", val: 3 },
+                { name: "Король", val: 4 },
+                { name: "Туз", val: 11 }
+            ],
+            attempt: 0,
+            max: 3,
+            uScore: 0,
+            cScore: 0
+        };
+
+        let name = prompt("Введіть ваше ім'я:", "Гравець");
+        if (name) {
+            document.getElementById("userName").textContent = name;
+        }
+
+        function makeStep() {
+            if (std.attempt >= std.max) return;
+            std.attempt++;
+
+            let uCard = std.cards[Math.floor(Math.random() * std.cards.length)];
+            let cCard = std.cards[Math.floor(Math.random() * std.cards.length)];
+
+            std.uScore += uCard.val;
+            std.cScore += cCard.val;
+
+            document.getElementById("userCard").textContent = uCard.name;
+            document.getElementById("compCard").textContent = cCard.name;
+
+            document.getElementById("userScore").textContent = std.uScore;
+            document.getElementById("compScore").textContent = std.cScore;
+            document.getElementById("attemptText").textContent = `Спроба ${std.attempt} з ${std.max}`;
+
+            if (std.attempt === std.max) {
+                document.getElementById("btn").disabled = true;
+                let res = document.getElementById("result");
+                
+                if (std.uScore > std.cScore) {
+                    res.textContent = "Переміг користувач!";
+                    res.style.color = "green";
+                } else if (std.cScore > std.uScore) {
+                    res.textContent = "Переміг комп'ютер!";
+                    res.style.color = "red";
+                } else {
+                    res.textContent = "Нічия!";
+                    res.style.color = "blue";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
